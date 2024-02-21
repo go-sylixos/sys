@@ -60,7 +60,7 @@ func Accept4(fd, flags int) (nfd int, sa Sockaddr, err error) {
 }
 
 // TODO, see golang.org/issue/5847
-func sendfile(outfd int, infd int, offset *int64, count int) (written int, err error) {
+func Sendfile(outfd int, infd int, offset *int64, count int) (written int, err error) {
 	return -1, ENOSYS
 }
 
