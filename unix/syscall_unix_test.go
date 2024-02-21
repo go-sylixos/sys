@@ -708,6 +708,10 @@ func compareStat_t(t *testing.T, otherStat string, st1, st2 *unix.Stat_t) {
 }
 
 func TestFstatat(t *testing.T) {
+	if runtime.GOOS == "sylixos" {
+		t.Skip("Fstatat is not supported on sylixos")
+	}
+
 	chtmpdir(t)
 
 	touch(t, "file1")
