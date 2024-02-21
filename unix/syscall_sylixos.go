@@ -510,4 +510,11 @@ func Futimes(fd int, tv []Timeval) (err error) {
 	return futimes(fd, (*[2]Timeval)(unsafe.Pointer(&tv[0])))
 }
 
+func Poll(fds []PollFd, timeout int) (n int, err error) {
+	if len(fds) == 0 {
+		return poll(nil, 0, timeout)
+	}
+	return poll(&fds[0], len(fds), timeout)
+}
+
 //sys	fcntl(fd int, cmd int, arg int) (val int, err error)

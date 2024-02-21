@@ -100,6 +100,11 @@ TEXT libc_futimes_trampoline<>(SB),NOSPLIT,$0-0
 GLOBL	·libc_futimes_trampoline_addr(SB), RODATA, $8
 DATA	·libc_futimes_trampoline_addr(SB)/8, $libc_futimes_trampoline<>(SB)
 
+TEXT libc_poll_trampoline<>(SB),NOSPLIT,$0-0
+	JMP	libc_poll(SB)
+GLOBL	·libc_poll_trampoline_addr(SB), RODATA, $8
+DATA	·libc_poll_trampoline_addr(SB)/8, $libc_poll_trampoline<>(SB)
+
 TEXT libc_fcntl_trampoline<>(SB),NOSPLIT,$0-0
 	JMP	libc_fcntl(SB)
 GLOBL	·libc_fcntl_trampoline_addr(SB), RODATA, $8
