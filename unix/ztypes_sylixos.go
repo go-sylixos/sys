@@ -65,9 +65,9 @@ type Stat_t struct {
 	Gid	uint32
 	Rdev	uint64
 	Size	int64
-	Atime	int64
-	Mtime	int64
-	Ctime	int64
+	Atim	Timespec
+	Mtim	Timespec
+	Ctim	Timespec
 	Blksize	int64
 	Blocks	int64
 	Resv1	*byte
@@ -391,4 +391,25 @@ const (
 	AT_FDCWD            = -0x2
 	AT_REMOVEDIR        = 0x1
 	AT_SYMLINK_NOFOLLOW = 0x1
+)
+
+type PollFd struct {
+	Fd      int32
+	Events  int16
+	Revents int16
+}
+
+const (
+	POLLIN   = (POLLRDNORM | POLLRDBAND)
+	POLLRDNORM = 0x1
+	POLLRDBAND = 0x2
+	POLLPRI  = 0x4
+
+	POLLOUT  = 0x8
+	POLLWRNORM = POLLOUT
+	POLLWRBAND = 0x10
+
+	POLLERR  = 0x20
+	POLLHUP  = 0x40
+	POLLNVAL = 0x80
 )
