@@ -749,6 +749,9 @@ func TestFstatat(t *testing.T) {
 }
 
 func TestFchmodat(t *testing.T) {
+	if runtime.GOOS == "sylixos" {
+		t.Skip("Fchmodat is not supported on sylixos")
+	}
 	chtmpdir(t)
 
 	touch(t, "file1")
@@ -859,6 +862,9 @@ func TestPipe(t *testing.T) {
 }
 
 func TestRenameat(t *testing.T) {
+	if runtime.GOOS == "sylixos" {
+		t.Skip("Renameat is not supported on sylixos")
+	}
 	chtmpdir(t)
 
 	from, to := "renamefrom", "renameto"
