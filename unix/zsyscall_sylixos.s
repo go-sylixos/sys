@@ -579,3 +579,8 @@ TEXT libc_posix_spawn_trampoline<>(SB),NOSPLIT,$0-0
 	JMP	libc_posix_spawn(SB)
 GLOBL	·libc_posix_spawn_trampoline_addr(SB), RODATA, $8
 DATA	·libc_posix_spawn_trampoline_addr(SB)/8, $libc_posix_spawn_trampoline<>(SB)
+
+TEXT libc_getpagesize_trampoline<>(SB),NOSPLIT,$0-0
+	JMP	libc_getpagesize(SB)
+GLOBL	·libc_getpagesize_trampoline_addr(SB), RODATA, $8
+DATA	·libc_getpagesize_trampoline_addr(SB)/8, $libc_getpagesize_trampoline<>(SB)
