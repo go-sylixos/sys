@@ -430,6 +430,16 @@ TEXT libc_sync_trampoline<>(SB),NOSPLIT,$0-0
 GLOBL	·libc_sync_trampoline_addr(SB), RODATA, $8
 DATA	·libc_sync_trampoline_addr(SB)/8, $libc_sync_trampoline<>(SB)
 
+TEXT libc_tcgetattr_trampoline<>(SB),NOSPLIT,$0-0
+	JMP	libc_tcgetattr(SB)
+GLOBL	·libc_tcgetattr_trampoline_addr(SB), RODATA, $8
+DATA	·libc_tcgetattr_trampoline_addr(SB)/8, $libc_tcgetattr_trampoline<>(SB)
+
+TEXT libc_tcsetattr_trampoline<>(SB),NOSPLIT,$0-0
+	JMP	libc_tcsetattr(SB)
+GLOBL	·libc_tcsetattr_trampoline_addr(SB), RODATA, $8
+DATA	·libc_tcsetattr_trampoline_addr(SB)/8, $libc_tcsetattr_trampoline<>(SB)
+
 TEXT libc_truncate_trampoline<>(SB),NOSPLIT,$0-0
 	JMP	libc_truncate(SB)
 GLOBL	·libc_truncate_trampoline_addr(SB), RODATA, $8

@@ -842,6 +842,11 @@ const (
 	S_IXGRP					= 0x8
 	S_IXOTH					= 0x1
 	S_IXUSR					= 0x40
+	TCSETS					= 0 // equivalent to TCSANOW for tcsetattr
+	TCSADRAIN				= 1
+	TCSETSW					= 1 // equivalent to TCSADRAIN for tcsetattr
+	TCSETSF					= 2 // equivalent to TCSAFLUSH for tcsetattr
+	TCGETS					= 3 // not defined in termios.h -- sylixos golang only
 	TCIFLUSH				= 0x0
 	TCIOFLUSH				= 0x2
 	TCOFLUSH				= 0x1

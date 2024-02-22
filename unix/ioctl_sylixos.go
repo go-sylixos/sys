@@ -1,12 +1,13 @@
-// Copyright 2018 The Go Authors. All rights reserved.
+// Copyright 2020 The Go Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-//go:build aix || solaris
+//go:build sylixos
 
 package unix
 
 import (
+	"runtime"
 	"unsafe"
 )
 
@@ -39,10 +40,14 @@ func IoctlSetWinsize(fd int, req int, value *Winsize) error {
 
 // IoctlSetTermios performs an ioctl on fd with a *Termios.
 //
-// The req value will usually be TCSETA or TIOCSETA.
+// The req value is expected to be TCSETS, TCSETSW, or TCSETSF
 func IoctlSetTermios(fd int, req int, value *Termios) error {
-	// TODO: if we get the chance, remove the req parameter.
-	return ioctlPtr(fd, req, unsafe.Pointer(value))
+	if (req != TCSETS) && (req != TCSETSW) && (req != TCSETSF) {
+		return ENOSYS
+	}
+	err := Tcsetattr(fd, int(req), value)
+	runtime.KeepAlive(value)
+	return err
 }
 
 // IoctlGetInt performs an ioctl operation which gets an integer value
@@ -62,8 +67,14 @@ func IoctlGetWinsize(fd int, req int) (*Winsize, error) {
 	return &value, err
 }
 
+// IoctlGetTermios performs an ioctl on fd with a *Termios.
+//
+// The req value is expected to be TCGETS
 func IoctlGetTermios(fd int, req int) (*Termios, error) {
 	var value Termios
-	err := ioctlPtr(fd, req, unsafe.Pointer(&value))
+	if req != TCGETS {
+		return &value, ENOSYS
+	}
+	err := Tcgetattr(fd, &value)
 	return &value, err
 }
