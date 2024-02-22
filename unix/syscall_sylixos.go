@@ -523,3 +523,13 @@ func Poll(fds []PollFd, timeout int) (n int, err error) {
 func Madvise(b []byte, behav int) (err error) {
 	return
 }
+
+// Mlock means nothing on sylixos
+func Mlock(b []byte) (err error) {
+	return
+}
+
+// Munlock means nothing on sylixos
+func Munlock(b []byte) (err error) {
+	return
+}
