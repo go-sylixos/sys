@@ -46,7 +46,8 @@ var libc_setgroups_trampoline_addr uintptr
 
 func wait4(pid int, wstatus *_C_int, options int, rusage *Rusage) (wpid int, err error) {
 	r0, _, e1 := syscall_syscall6Xerrno(libc_wait4_trampoline_addr, uintptr(pid), uintptr(unsafe.Pointer(wstatus)), uintptr(options), uintptr(unsafe.Pointer(rusage)), 0, 0)
-	wpid = int(r0)
+	tmpwpid := int32(r0)
+	wpid = int(tmpwpid)
 	if e1 != 0 {
 		err = errnoErr(e1)
 	}
