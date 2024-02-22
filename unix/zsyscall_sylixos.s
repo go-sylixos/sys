@@ -470,6 +470,16 @@ TEXT libc_munmap_trampoline<>(SB),NOSPLIT,$0-0
 GLOBL	·libc_munmap_trampoline_addr(SB), RODATA, $8
 DATA	·libc_munmap_trampoline_addr(SB)/8, $libc_munmap_trampoline<>(SB)
 
+TEXT libc_mprotect_trampoline<>(SB),NOSPLIT,$0-0
+	JMP	libc_mprotect(SB)
+GLOBL	·libc_mprotect_trampoline_addr(SB), RODATA, $8
+DATA	·libc_mprotect_trampoline_addr(SB)/8, $libc_mprotect_trampoline<>(SB)
+
+TEXT libc_msync_trampoline<>(SB),NOSPLIT,$0-0
+	JMP	libc_msync(SB)
+GLOBL	·libc_msync_trampoline_addr(SB), RODATA, $8
+DATA	·libc_msync_trampoline_addr(SB)/8, $libc_msync_trampoline<>(SB)
+
 TEXT libc_lseek_trampoline<>(SB),NOSPLIT,$0-0
 	JMP	libc_lseek(SB)
 GLOBL	·libc_lseek_trampoline_addr(SB), RODATA, $8

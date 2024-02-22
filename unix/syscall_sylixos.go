@@ -518,3 +518,8 @@ func Poll(fds []PollFd, timeout int) (n int, err error) {
 }
 
 //sys	fcntl(fd int, cmd int, arg int) (val int, err error)
+
+// Madvise means nothing on sylixos
+func Madvise(b []byte, behav int) (err error) {
+	return
+}
