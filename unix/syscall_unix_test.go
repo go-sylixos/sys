@@ -455,6 +455,9 @@ func TestDup(t *testing.T) {
 	if runtime.GOOS == "sylixos" && runtime.GOARCH == "arm64" {
 		// Test on RK3568 demo board wtih sdcard & passed.
 		tmpDir = "/media/sdcard10/tmp"
+	} else if runtime.GOOS == "sylixos" && runtime.GOARCH == "amd64" {
+		// Test on qemu x86_64 wtih hdd & passed.
+		tmpDir = "/media/hdd0/tmp"
 	} else {
 		tmpDir = t.TempDir()
 	}

@@ -6,6 +6,7 @@
 package unix
 
 import (
+	"runtime"
 	"syscall"
 	"unsafe"
 )
@@ -1485,8 +1486,10 @@ var libc_writev_trampoline_addr uintptr
 func mmap(addr uintptr, length uintptr, prot int, flag int, fd int, pos int64) (ret uintptr, err error) {
 	// addr must be 0 on sylixos, it's make sured in syscall_unix.go
 	r0, _, e1 := syscall_syscall6X(libc_mmap_trampoline_addr, uintptr(addr), uintptr(length), uintptr(prot), uintptr(flag), uintptr(fd), uintptr(pos))
-	// FIXME: 0x276D0000 is a devil's number is sylixos, I don't know why!
-	r0 = r0 - 0x276D0000
+	// FIXME: 0x276D0000 is a devil's number is sylixos on arch arm64, I don't know why!
+	if runtime.GOARCH == "arm64" {
+		r0 = r0 - 0x276D0000
+	}
 	ret = uintptr(r0)
 	if e1 != 0 {
 		err = errnoErr(e1)
