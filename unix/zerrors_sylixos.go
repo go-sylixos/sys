@@ -560,11 +560,11 @@ const (
 	MS_INVALIDATE				= 0x4
 	MS_SYNC					= 0x2
 	NAME_MAX				= 0x200
-	// Maybe NFDBITS is 0x40;
+	// Maybe NFDBITS is 0x20;
 	// typedef ULONG               fd_mask;
 	// #define NBBY                8
 	// #define NFDBITS             (sizeof(fd_mask) * NBBY) /* bits per mask */
-	NFDBITS					= 0x20
+	NFDBITS					= 0x40
 	NOFLSH					= 0x80
 	OCRNL					= 0x8
 	OFDEL					= 0x80
