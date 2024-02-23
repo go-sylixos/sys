@@ -917,6 +917,9 @@ func TestRenameat(t *testing.T) {
 }
 
 func TestUtimesNanoAt(t *testing.T) {
+	if runtime.GOOS == "sylixos" {
+		t.Skip("UtimesNanoAt is not supported on sylixos")
+	}
 	nonexisting := "nonexisting"
 
 	if runtime.GOOS == "sylixos" {
