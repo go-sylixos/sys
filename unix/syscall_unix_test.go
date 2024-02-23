@@ -450,24 +450,9 @@ func TestSetsockoptString(t *testing.T) {
 }
 
 func TestDup(t *testing.T) {
-	var tmpDir string
-
-	if runtime.GOOS == "sylixos" && runtime.GOARCH == "arm64" {
-		// Test on RK3568 demo board wtih sdcard & passed.
-		tmpDir = "/media/sdcard10/tmp"
-	} else if runtime.GOOS == "sylixos" && runtime.GOARCH == "amd64" {
-		// Test on qemu x86_64 wtih hdd & passed.
-		tmpDir = "/media/hdd0/tmp"
-	} else {
-		tmpDir = t.TempDir()
-	}
-
-	file, err := os.Create(filepath.Join(tmpDir, t.Name()))
+	file, err := os.Create(filepath.Join(t.TempDir(), t.Name()))
 	if err != nil {
 		t.Fatal(err)
-	}
-	if runtime.GOOS == "sylixos" && runtime.GOARCH == "arm64" {
-		os.Remove(file.Name())
 	}
 	defer file.Close()
 	f := int(file.Fd())
@@ -1195,19 +1180,22 @@ func mktmpfifo(t *testing.T) *os.File {
 // mktmpfifo_sylixos creates a temporary FIFO and sets up a cleanup function.
 func mktmpfifo_sylixos(t *testing.T) *os.File {
 	t.Helper()
-	err := unix.Mkfifo("/dev/pipe/fifo", 0666)
+	// sylixos has mkfifo only for /dev/pipe/*
+	fifopath := "/dev/pipe/fifo"
+
+	err := unix.Mkfifo(fifopath, 0666)
 	if err != nil {
 		t.Fatalf("mktmpfifo: failed to create FIFO: %v", err)
 	}
 
-	f, err := os.OpenFile("/dev/pipe/fifo", os.O_RDWR, 0666)
+	f, err := os.OpenFile(fifopath, os.O_RDWR, 0666)
 	if err != nil {
-		os.Remove("/dev/pipe/fifo")
+		os.Remove(fifopath)
 		t.Fatal(err)
 	}
 	t.Cleanup(func() {
 		f.Close()
-		os.Remove("/dev/pipe/fifo")
+		os.Remove(fifopath)
 	})
 
 	return f
@@ -1242,4 +1230,19 @@ func chtmpdir(t *testing.T) {
 			t.Fatal(err)
 		}
 	})
+}
+
+func init() {
+	var utsname unix.Utsname
+	unix.Uname(&utsname)
+
+	if runtime.GOOS == "sylixos" && runtime.GOARCH == "arm64" {
+		// Test on RK3568 demo board wtih sdcard & passed.
+		if string(utsname.Machine[:6]) == "RK3568" {
+			os.Setenv("TMPDIR", "/media/sdcard10/tmp")
+		}
+	} else if runtime.GOOS == "sylixos" && runtime.GOARCH == "amd64" {
+		// Test on qemu x86_64 wtih hdd & passed.
+		os.Setenv("TMPDIR", "/media/hdd0/tmp")
+	}
 }
