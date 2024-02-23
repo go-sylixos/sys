@@ -212,9 +212,18 @@ func TestPassFD(t *testing.T) {
 	}
 	cmd.ExtraFiles = []*os.File{writeFile}
 
-	out, err := cmd.CombinedOutput()
-	if len(out) > 0 || err != nil {
-		t.Fatalf("child process: %q, %v", out, err)
+	if runtime.GOOS == "sylixos" {
+		// Unix network will be closed when prosess exits on sylixos,
+		// We need to hold the child process while parent process exits.
+		go func() {
+			cmd.Run()
+		}()
+		time.Sleep(5 * time.Millisecond)
+	} else {
+		out, err := cmd.CombinedOutput()
+		if len(out) > 0 || err != nil {
+			t.Fatalf("child process: %q, %v", out, err)
+		}
 	}
 
 	c, err := net.FileConn(readFile)
@@ -248,6 +257,9 @@ func TestPassFD(t *testing.T) {
 		t.Fatalf("expected 1 SocketControlMessage; got scms = %#v", scms)
 	}
 	scm := scms[0]
+	// Unix network will be closed when prosess exits on sylixos,
+	// We need to hold the child process while parent process exits.
+	// If child process exits before here, gotFds[0] will be set to -1.
 	gotFds, err := unix.ParseUnixRights(&scm)
 	if err != nil {
 		t.Fatalf("unix.ParseUnixRights: %v", err)
@@ -310,6 +322,12 @@ func passFDChild() {
 	if n != 1 || oobn != len(rights) {
 		fmt.Printf("WriteMsgUnix = %d, %d; want 1, %d", n, oobn, len(rights))
 		return
+	}
+
+	if runtime.GOOS == "sylixos" {
+		// Unix network will be closed when prosess exits on sylixos,
+		// We need to hold the child process while parent process exits.
+		time.Sleep(10 * time.Millisecond)
 	}
 }
 
