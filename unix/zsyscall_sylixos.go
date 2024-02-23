@@ -7,6 +7,7 @@ package unix
 
 import (
 	"runtime"
+	"strings"
 	"syscall"
 	"unsafe"
 )
@@ -943,6 +944,10 @@ var libc_mkdir_trampoline_addr uintptr
 
 func Mkfifo(path string, mode uint32) (err error) {
 	var _p0 *byte
+	if !strings.HasSuffix(path, "/dev/pipe") {
+		// sylixos has mkfifo only for /dev/pipe/*
+		err = ESTRPIPE
+	}
 	_p0, err = BytePtrFromString(path)
 	if err != nil {
 		return
