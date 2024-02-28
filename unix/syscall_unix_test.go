@@ -919,22 +919,10 @@ func TestUtimesNanoAt(t *testing.T) {
 	if runtime.GOOS == "sylixos" {
 		t.Skip("UtimesNanoAt is not supported on sylixos")
 	}
-	nonexisting := "nonexisting"
-
-	if runtime.GOOS == "sylixos" {
-		os.Remove(nonexisting)
-		os.Create(nonexisting)
-		defer os.Remove(nonexisting)
-	} else {
-		chtmpdir(t)
-	}
+	chtmpdir(t)
 
 	symlink := "symlink1"
 	os.Remove(symlink)
-	if runtime.GOOS == "sylixos" {
-		defer os.Remove(symlink)
-	}
-
 	err := os.Symlink("nonexisting", symlink)
 	if err != nil {
 		t.Fatal(err)
@@ -951,24 +939,10 @@ func TestUtimesNanoAt(t *testing.T) {
 		t.Fatalf("UtimesNanoAt: %v", err)
 	}
 
-	if runtime.GOOS == "sylixos" {
-		err = unix.UtimesNanoAt(unix.AT_FDCWD, nonexisting, ts, unix.AT_SYMLINK_NOFOLLOW)
-		if err != nil {
-			t.Fatalf("UtimesNanoAt: %v", err)
-		}
-	}
-
 	var st unix.Stat_t
 	err = unix.Lstat(symlink, &st)
 	if err != nil {
 		t.Fatalf("Lstat: %v", err)
-	}
-
-	if runtime.GOOS == "sylixos" {
-		err = unix.Lstat(nonexisting, &st)
-		if err != nil {
-			t.Fatalf("Lstat: %v", err)
-		}
 	}
 
 	// Only check Mtim, Atim might not be supported by the underlying filesystem
