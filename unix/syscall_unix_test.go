@@ -643,11 +643,6 @@ func TestSelect(t *testing.T) {
 	fd := int(rr.Fd())
 	rFdSet.Set(fd)
 
-	// FIXME: fix this test on sylixos, otherwise it will stuck system.
-	if runtime.GOOS == "sylixos" {
-		t.Skip("skipping Select on anno PIPE on sylixos")
-	}
-
 	for {
 		n, err := unix.Select(fd+1, rFdSet, nil, nil, nil)
 		if err == unix.EINTR {
