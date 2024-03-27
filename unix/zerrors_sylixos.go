@@ -136,6 +136,7 @@ const (
 	FD_CLOEXEC				= 0x1
 	FD_SETSIZE				= 0x800
 	FIOFLUSH				= 0x2
+	FIOSETOPTIONS			= 0x3
 	FIORFLUSH				= 0x1a
 	FIOWFLUSH				= 0x1b
 	FLUSHO					= 0x1000

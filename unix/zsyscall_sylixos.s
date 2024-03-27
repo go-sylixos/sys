@@ -604,3 +604,13 @@ TEXT libc_getpagesize_trampoline<>(SB),NOSPLIT,$0-0
 	JMP	libc_getpagesize(SB)
 GLOBL	·libc_getpagesize_trampoline_addr(SB), RODATA, $8
 DATA	·libc_getpagesize_trampoline_addr(SB)/8, $libc_getpagesize_trampoline<>(SB)
+
+TEXT libc_API_PtyDevCreate_trampoline<>(SB),NOSPLIT,$0-0
+	JMP	libc_API_PtyDevCreate(SB)
+GLOBL	·libc_API_PtyDevCreate_trampoline_addr(SB), RODATA, $8
+DATA	·libc_API_PtyDevCreate_trampoline_addr(SB)/8, $libc_API_PtyDevCreate_trampoline<>(SB)
+
+TEXT libc_API_PtyDevRemove_trampoline<>(SB),NOSPLIT,$0-0
+	JMP	libc_API_PtyDevRemove(SB)
+GLOBL	·libc_API_PtyDevRemove_trampoline_addr(SB), RODATA, $8
+DATA	·libc_API_PtyDevRemove_trampoline_addr(SB)/8, $libc_API_PtyDevRemove_trampoline<>(SB)
