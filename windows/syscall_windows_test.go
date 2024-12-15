@@ -830,9 +830,9 @@ func FuzzComposeCommandLine(f *testing.F) {
 					// If args[0] contains a space or control character, we must quote it
 					// to avoid it being split into multiple arguments.
 					// If args[0] already starts with a quote character, we have no way
-					// to indicate that that character is part of the literal argument.
+					// to indicate that character is part of the literal argument.
 					// In either case, if the string already contains a quote character
-					// we must avoid misinterpriting that character as the end of the
+					// we must avoid misinterpreting that character as the end of the
 					// quoted argument string.
 					//
 					// Unfortunately, ComposeCommandLine does not return an error, so we
@@ -1435,5 +1435,41 @@ uintptr_t beep(void) {
 	_, err = windows.LoadLibraryEx("beep.dll", 0, windows.LOAD_LIBRARY_SEARCH_USER_DIRS)
 	if err == nil {
 		t.Fatal("LoadLibraryEx unexpectedly found beep.dll")
+	}
+}
+
+func TestToUnicodeEx(t *testing.T) {
+	var utf16Buf [16]uint16
+
+	// Arabic (101) Keyboard Identifier
+	// See https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-language-pack-default-values
+	ara, err := windows.UTF16PtrFromString("00000401")
+	if err != nil {
+		t.Fatalf("UTF16PtrFromString failed: %v", err)
+	}
+	araLayout, err := windows.LoadKeyboardLayout(ara, windows.KLF_ACTIVATE)
+	if err != nil {
+		t.Fatalf("LoadKeyboardLayout failed: %v", err)
+	}
+
+	var keyState [256]byte
+	ret := windows.ToUnicodeEx(
+		0x41, // 'A' vkCode
+		0x1e, // 'A' scanCode
+		&keyState[0],
+		&utf16Buf[0],
+		int32(len(utf16Buf)),
+		0x4, // don't change keyboard state
+		araLayout,
+	)
+
+	if ret != 1 {
+		t.Errorf("ToUnicodeEx failed, wanted 1, got %d", ret)
+	}
+	if utf16Buf[0] != 'ش' {
+		t.Errorf("ToUnicodeEx failed, wanted 'ش', got %q", utf16Buf[0])
+	}
+	if err := windows.UnloadKeyboardLayout(araLayout); err != nil {
+		t.Errorf("UnloadKeyboardLayout failed: %v", err)
 	}
 }
