@@ -1000,7 +1000,7 @@ func Mount(source string, target string, fstype string, flags uintptr, data stri
 	if err != nil {
 		return
 	}
-	_, _, e1 := syscall_syscall6X(libc_mount_trampoline_addr, uintptr(unsafe.Pointer(_p0)), uintptr(unsafe.Pointer(_p1)), uintptr(unsafe.Pointer(_p2)), uintptr(flags), 0, 0)
+	_, _, e1 := syscall_syscall6Xerrno(libc_mount_trampoline_addr, uintptr(unsafe.Pointer(_p0)), uintptr(unsafe.Pointer(_p1)), uintptr(unsafe.Pointer(_p2)), uintptr(flags), 0, 0)
 	if e1 != 0 {
 		err = errnoErr(e1)
 	}
