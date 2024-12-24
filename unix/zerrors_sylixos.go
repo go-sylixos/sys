@@ -561,6 +561,7 @@ const (
 	MS_ASYNC				= 0x1
 	MS_INVALIDATE				= 0x4
 	MS_SYNC					= 0x2
+	MS_RDONLY				= 0x1
 	NAME_MAX				= 0x200
 	// Maybe NFDBITS is 0x20;
 	// typedef ULONG               fd_mask;
